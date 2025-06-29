@@ -1,0 +1,1549 @@
+Interview
+-----------------
+
+1. What is garbage collector and how it works in Java
+ans. The garbage collector in Java is an automatic memory management process that reclaims memory occupied by objects that are no longer in use by the program.
+a. First identifies unreachable objects.
+b. It reclaims memory making it availabel for new objects.
+c. It is automatic process, developers don't need to manually manage memory allocation or deallocation.
+d. It prevents memory leaks and improves performance.
+
+2. How JVM makes Java platform independent
+ans. Java is platform independent because it uses Write Once Runs Everywhere approach.
+Java source code is compiled into bytecode which makes it neutral.
+This bytecode can run on any platform that has JVM compatible with that bytecode.
+
+3. How can we analyse memory leaks in our code any tools if mention?
+ans. For detecting memory leaks : 
+a. Manual inspection - Carefully review the code for patterns that can cause leaks like circular references, static variables etc.
+b. Unit tests - Writing unit tests that specifically checks memory loss.
+c. Tracing and Debugging 
+
+4. Lifecycle of an object in Java
+ans. The lifecycle of an object encompasses from its creation to its eventual removal from memory. 
+a. Classloading - When a Java program is executed, the JVM loads the necessary .class files into memory. This includes the class definition for the object you intend to create.
+b. Memory allocation - Space is allocated in heap memory for object.
+c. Initialization - The objects's instance variables are initialized.
+d. Usable or modified state - Its methods can be called, and its state can be modified. 
+e. Unreachability - When there are no strong references to the object it becomes unreachable. It is no longer accessible through the program. The object is considered garbage and then JVM calls the finalize() method if exists for cleanup operations.
+f. Garbage collection - After that garbage collector reclaims its memory.
+
+5. Concept of multi threading in Java
+ans. 
+a. Multithreading in Java enables concurrent execution of multiple parts of a program, known as threads, within a single process. 
+b. These threads act as lightweight sub-processes, allowing a program to perform multiple tasks simultaneously and maximize CPU utilization.
+c. It is a powerful tool for improving performance but it requires planning and implementation to avoid potential performance.
+
+6. Annotations used for multi threading in spring boot
+ans. 
+@Async - This annotation is used to mark a method as asynchronous meaning it will be executed in separate thread. To enable @Async you must add @EnableAsync to your class which enables Spring's asynchronous method execution capability. 
+@Scheduled - This annotation is used to schedule the execution of a method at fixed intervals. By default @Scheduled tasks are executed in a single thread. If multiple tasks are present, then they execute sequentially. 
+To run scheduled tasks concurrently, a custom TaskSchedular can be configured.
+
+7. Describe deadlock with example.
+ans. 
+A deadlock occurs when two or more processes are blocked indefinitely, each waiting for a resource that is held by another process in the group, creating a circular dependency. 
+This situation prevents any of the blocked processes from making progress. 
+Imagine two people, A and B, each holding a key (Resource) but needing a different key to unlock a door. 
+Person A has Key 1 but needs Key 2 to unlock the door.
+Person B has Key 2 but needs Key 1 to unlock the door.
+
+In this scenario, neither person can proceed because they are both waiting for the other to release the key they need. This represents a deadlock situation. 
+
+8. How does the final keyword affect the design of the Java program?
+ans. The final keyword in Java acts as a modifier that restricts changes to variables, methods and classes influencing in different ways.
+a. For variables, it becomes constant i.e value can be only assigned once during initialization, which promotes immutability and thread-safety.
+b. For methods, it cannot be overridden by its subclass. This ensures the method's implementation is consistent across the inheritance hierarchy , preventing unintended modifications.
+c. For class, it makes class cannot be inherited or extended from. Final classes can be used for security purposes, preventing external modifications.
+
+9. Important concepts introduced in Java 8
+ans. Java8 introduces several significant features but some of the important features include lambda expression, functional interfaces, stream api, Optional class, default and static methods in interfaces, and the new DateAndTime API. 
+
+Lambda Expression - It is a way to represent anonymous functions using -> operator. It is a way to facilitate functional programming.
+It improves code readability and reduce boilerplate code.
+
+Functional Interfaces - It is a type of interface having only one abstract method. Predicate, Consumer, Function and Supplier are examples of Functional interfaces. 
+Predicate - It tests a condition and returns a boolean value.
+Consumer - It accepts a single argument and returns no result.
+Function - It accepts an arguments and returns a result.
+Supplier - It does not takes any arguments but returns a result.
+
+Stream API - It is a way to perform operations on a collections of objects such as arrays or collections. Common stream operations include filter(), map(), sorted(), forEach(), collect(), reduce() etc.
+
+Optional class - It is used to handle null values in Java and avoid NullPointerException. Alternative way for if---else null checks.
+
+Default methods - It provides default implementations for methods defined within an interface. This allows adding new functionality to the existing interfaces without breaking the default or existing implementation which maintains backwards compatibility.
+
+Static methods - These methods are associated with the interface itself rather than any specific implemented class. These methods can be directly called using the interface name, without the need to create an object.
+
+New DateTime API - It provides a comprehensive, clear and thread-safe way to handle date and time operations. This API provides methods for parsing, formatting, and manipulating date and time and it is recommended for all new date and time-related developments.
+Some key-classes are LocalDateTime, ZonedDateTime , Instant, Period etc.
+
+10. Example of Optional class in real time projects.
+ans. It is used to handle null values in Java and avoid NullPointerException.
+Scenario: A real-time messaging system needs to retrieve a user's profile picture from a database based on their user ID.
+
+Without Optional, 
+public String getProfilePicture(int userId) {
+    User user = userRepository.findById(userId);
+    if (user != null) {
+        return user.getProfilePictureUrl();
+    }
+    return null; // Or return a default image, handle error, etc.
+}
+
+With Optional , 
+public Optional<String> getProfilePicture(int userId) {
+    Optional<User> userOptional = userRepository.findById(userId);
+    return userOptional.map(User::getProfilePictureUrl); // or use .orElse(...)
+}
+
+11. In which scenarios stream api is better than traditional for loops.
+ans. It all depends on the use case: For simple tasks where performance is crucial, traditional loops may be the better option. For complex data processing or parallel execution, Java 8 Streams offer better readability and ease of use. Stream API offers more readable, concise and efficient code  that enhances performance and maintainability.
+
+12. Describe Singleton design pattern.
+ans. The Singleton design pattern in Java ensures that a class has only one instance and provides a global point of access to it. This is useful when you need to control resource usage or maintain a single state across your application. Eg. database connection.
+Key characteristics:
+Private constructor: Prevents external instantiation of the class.
+Static instance: A static member holds the single instance of the class. 
+Public static method: Provides a global access point to retrieve the instance.
+
+13. What is circuit breaker pattern and what configurations are required to set up this?
+ans. The Circuit Breaker pattern is a design pattern used in microservices to enhance system resilience and fault tolerance. 
+It acts like an electrical circuit breaker by preventing an application from repeatedly trying to execute an operation that is likely to fail, which can lead to cascading failures across the system.
+It works by monitoring service calls and transitioning different states (Closed, Open and Half-Open) based on failure rates and recovery attempts.
+
+Configurations Required for Circuit Breaker Setup:
+1. Thresholds:
+Failure Rate Threshold: Defines the acceptable percentage of failures before the circuit breaker transitions to the Open state. 
+Time Window: Specifies the period over which failure rates are calculated. 
+Open State Duration: Determines how long the circuit breaker remains in the Open state before transitioning to the Half-Open state. 
+2. Fallback Mechanisms:
+Fallback Logic: Defines what the application does if the circuit breaker is open and requests cannot be routed to the failing service. This could involve returning a default value, caching data, or routing requests to an alternative service. 
+3. Monitoring and Metrics:
+Metrics Collection: Gather information about the number of requests, failures, and success rates to track the circuit breaker's state. 
+Alerting: Set up alerts to notify administrators when the circuit breaker transitions to the Open state or when other performance metrics are outside acceptable bounds. 
+4. Circuit Breaker Implementation:
+Framework/Library Integration: Integrate the Circuit Breaker pattern with appropriate libraries or frameworks (e.g., Hystrix, Resilience4j). 
+Code Implementation: Implement the circuit breaker logic to monitor service calls, handle failures, and transition between states. 
+5. Testing:
+Scenario Testing: Create scenarios to simulate failures and verify that the circuit breaker correctly transitions between states and triggers fallback mechanisms. 
+Performance Testing: Test the impact of the circuit breaker on system performance under load. 
+
+
+14. Can an interface final in Java?
+ans .In Java, an interface cannot be declared as final. The purpose of an interface is to define a contract that classes can implement, specifying a set of methods that the implementing classes must provide.
+
+15. How does Spring-boot simplify the deployment of our web application?
+ans. Spring Boot simplifies web application deployment by reducing the need for manual configuration, providing embedded servers, and offering various deployment options. It achieves this through features like auto-configuration, embedded servers, and starter dependencies, making it easier to package, run, and deploy applications in different environments. 
+
+16. What are the servers available in spring boot?
+ans. Tomcat, Jetty and Undertow. By default, Tomcat is configured.
+To switch from the default Tomcat server, you need to exclude the Tomcat dependency from your pom.xml or build.gradle file and add the desired server dependency.
+
+17. How to remove the default server provided by spring-boot and use another server?
+ans. To switch from the default Tomcat server, you need to exclude the Tomcat dependency from your pom.xml or build.gradle file and add the desired server dependency.
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+	<exclusions>
+		<!-- Exclude the Tomcat dependency -->
+		<exclusion>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+		</exclusion>
+	</exclusions>
+</dependency>
+<!-- Use Jetty instead -->
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-jetty</artifactId>
+</dependency>
+
+18. Concept of starter dependency in spring boot?
+ans. Starter dependencies in springboot simplifies development and also reduces boilerplate codes which are required to setup configuration. 
+spring-boot-starter-web: For building web applications.
+spring-boot-starter-data-jpa: For accessing databases using JPA.
+spring-boot-starter-test: For writing unit and integration tests.
+spring-boot-starter-security: For adding authentication and authorization.
+
+19. Use of @Transactional Annotation in Java.
+ans. The @Transactional annotation in Spring Boot is used to manage database transactions. It ensures that a series of operations are treated as a single unit, either all succeeding or all failing. This maintains data integrity and consistency. 
+When a method is annotated with @Transactional, a transaction begins when the method starts and commits when it finishes. If any exception occurs, the transaction rolls back, undoing any changes.
+
+20. How to handle exceptions in microservice.
+ans. Using @RestControllerAdvice in class level and @ExceptionHandler in method level.
+First create any custom level exception which should extend RuntimeException and also a ErrorResponse class which will give response if error exists.
+Inside @ExceptionHandler(value = "pass the value of custom exception.class")
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(value = NoSuchCustomerExistsException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public @ResponseBody ErrorResponse handleException(NoSuchCustomerExistsException ex) {
+        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    }
+}
+
+21. How do you handle session management in a high traffic spring boot application?
+ans. 
+Load Balancing:
+Distribute incoming traffic across multiple instances of your application using load balancers like Nginx, HAProxy, or cloud-based solutions (e.g., AWS ELB).
+
+API Gateway:
+Implement an API gateway (e.g., Spring Cloud Gateway) to manage traffic, handle authentication, routing, and other cross-cutting concerns.
+This provides a single entry point for all requests.
+
+Scaling:
+Horizontal scaling: Add more instances of your application to handle increased traffic.
+Vertical scaling: Increase the resources (CPU, RAM) of existing servers.
+Containerization with Kubernetes or Docker Swarm helps manage and scale applications.
+
+Caching:
+Implement caching mechanisms (e.g., Redis) to reduce the load on the database and improve response times.
+Cache frequently accessed data to avoid redundant database queries.
+
+Database Optimization:
+Optimize database queries for better performance.
+Consider using distributed databases for large-scale systems.
+
+22. Describe Spring web flux.
+ans. 
+Spring WebFlux is a reactive web framework that is part of the Spring Framework. It is designed to handle concurrent requests efficiently and provides a non-blocking, asynchronous programming model. 
+Spring WebFlux is suitable for applications that require high concurrency and scalability. It is an alternative to Spring MVC, and both can coexist in the same application.
+
+23. What is reactive programming?
+ans. Reactive programming in Spring Boot is a programming paradigm focused on asynchronous data streams and the propagation of change. It allows developers to build non-blocking, event-driven applications that can handle large volumes of concurrent requests with fewer resources.
+Spring Boot provides support for reactive programming through Spring WebFlux, a non-blocking web framework built on Project Reactor.
+
+Improved scalability and performance by handling more concurrent requests with fewer threads.
+Reduced resource consumption due to non-blocking operations.
+
+24. Describe a scenario where AOP can solve complex programs in application development.
+ans. logging-related
+security checks
+transaction management
+tweaking of a legacy application
+
+Automatically registering objects in JMX for remote management. If a class is annotated with our @AutoRegister annotation, we have an aspect that watches for new instantiations of that class and registers them in JMX automatically.
+
+25. Find the 2nd largest element from an array.
+ans. 
+        List<Integer> ll = new ArrayList<>();
+		ll.add(4);
+		ll.add(56);
+		ll.add(5);
+		Integer reversed = ll.stream().sorted(Comparator.reverseOrder()).skip(1).findFirst().orElse(null);
+		System.out.println(reversed);
+
+26. What is dynamic binding in Java ?
+ans. Dynamic binding is a mechanism in Java where the method to be called is determined at runtime, based on the actual object type, rather than at compile time.
+It is also known as Runtime polymorphism where Method overriding takes place i.e if a parent class has a method and its child class wants to implement same method but with different logic. 
+If we create object of child class using parent class reference then child class method will be called. 
+
+Parent p = new Child();
+p.call();       //child method will be called
+
+27. What is String in java ?
+ans. String represents a sequence of characters. It is present in java.lang package. 
+It is immutable in java. It gets stored in heap memory. 
+
+28. Will you use String if you want to do a lots of concatenation?
+ans. String is immutable. So, you would prefer StringBuilder or StringBuffer instead. 
+If you need to concatenate bunch of strings together then go with StringBuilder.
+Simply I can say, if you are in single threaded application and do not care about thread-safety, go for StringBuilder and if thread-safety is a concern then go for StringBuffer.
+
+29. == and .equals method difference ? 
+ans. == - It is an operator. It is used to check memory reference(for objects) and values for primitives. The behaviour of == operator is fixed, it cannot be overridden.
+
+.equals - It is a method. It is used to check content of the object. By default, .equals works same as == i.e checks memory references but it can be overridden to check object's content. Cannot be used with primitive types.
+
+30. Difference between StringBuilder and StringBuffer . 
+ans. StringBuilder is not thread-safe i.e it cannot be used in multi-threaded environments. It is faster than StringBuffer because it does not perform synchronization. 
+
+StringBuffer is threadsafe i.e it can be used in multi-threaded environments. It is comparatively slower than StringBuilder because it performs synchronization. 
+
+31. Different ways to create thread in java? 
+ans. 2 ways to create thread in Java : 
+a. By extending thread class - it can limit flexibility as a class can only extend one other class, but can implement multiple interfaces. Implementing Runnable allows your class to still inherit from another class while also being able to be executed as a thread. 
+b. By implementing Runnable interface. - better way.
+
+32. Different stages of thread in java. 
+ans. 
+1. New: A thread is in the new state when it is created using the Thread class constructor.
+2. Runnable: A thread enters the runnable state after the start() method is called. At this point, the thread is eligible to be executed by the JVM.
+3. Running: The thread is in the running state when it is actively executing its task on the CPU.
+4. Blocked/Waiting: A thread enters the blocked or waiting state when it is temporarily paused.  This can happen for various reasons, such as:
+Waiting for a lock to be released by another thread.
+Waiting for a specific event or condition to occur.
+Waiting for I/O operations to complete.
+Calling wait() method on an object.
+Calling join() method on another thread.
+
+5. Terminated (Dead): A thread enters the terminated state when it has completed its execution or when an exception occurs that causes it to terminate. Once a thread is terminated, it cannot be restarted.
+
+33. Significance and implementation of Hashmap.
+ans. HashMap stores data in (key, value) pairs. Each key is associated with a value, and you can access the value by using the corresponding key.Not synchronized. 
+Allows to store the null keys as well, but there should be only one null key object, and there can be any number of null values.
+Duplicate keys are not allowed in HashMap, if you try to insert the duplicate key, it will replace the existing value of the corresponding key. 
+HashMap uses keys in the same way as an Array uses an index.
+HashMap allows for efficient key-based retrieval, insertion, and removal with an average O(1) time complexity.
+
+Internal working of Hashmap 
+-------------------------------------
+-> When a key-value pair is inserted into the Hashmap , it computes a hashcode for the key using the hash function.
+
+-> The hashcode is use to determine the index in these array when the key value pair should be stored. Hashcode ensures that the index is within the bounds of the array.
+
+-> If the index is already occupied by another key-value pair, a collision has occured. There are different ways to handlr collisions, common approach is linked list to store multiple key-value pairs at same index.
+
+->If the index is already occupied by another key-value pair, a collision has occurred. There are different ways to handle collisions. Common approach is LinkedList to store multiple Key-value pairs at same index.
+
+→ When retrieving a value based on a Key, the hashmap computes the hashcode for the key and uses it to find the index in the array where the value is stored.
+
+→ If the Key is not found, the hashmap returns null or throws an exception, depending on the implementation.
+
+✱ To ensure efficient performance, the hashmap typically uses a load factor to determine when to resize the array. When the no. of Key-value pairs exceeds the product of load factor and size of the array, the hashmap creates a new, larger array and rehashes all the Key-value pairs into the new array.
+
+Now, from Java 8, LinkedList approach of solving collision is replaced by Tree.
+The threshold of switching to the balanced tree is defined as TREEIFY_THRESHOLD constant. Currently its value is 8, which means if there are more than 8 elements at the same bucket, then HashMap will use a tree instead of LinkedList to hold them in same bucket.
+
+
+34.  Scenarios to describe when to go for Concurrent HashMap over HashMap.
+ans. If the data structure is accessed by a large number of threads concurrently or you are using a multi-threaded application , using ConcurrentHashMap can improve the overall throughput of the system because it is thread-safe in nature. 
+
+35.  How to connect with database from my Spring-boot application.
+ans. First define these properties in your application.properties file : 
+spring.datasource.url=jdbc:mysql://localhost:3306/mydatabase
+spring.datasource.username=root
+spring.datasource.password=123456
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+
+Create a model class and marked it with @Entity and @Table (to provide the table name).
+Create a repository interface which should extend JpaRepository or CRUD repository.
+Use this repository in the service layer or business logic class by injecting its dependency using @Autowired.
+Use the service layer in your controller class i.e annotated with @RestController and all RequestMapping bodies i.e GET, POST etc.
+
+36. Rest api which will contact the database and return a few rows from it.
+ans. 
+application.properties
+------------------------------
+   spring.datasource.url=jdbc:mysql://localhost:3306/your_database
+   spring.datasource.username=your_username
+   spring.datasource.password=your_password
+   spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+   spring.jpa.hibernate.ddl-auto=update
+
+Service class
+---------------------
+     import org.springframework.beans.factory.annotation.Autowired;
+     import org.springframework.stereotype.Service;
+     import java.util.List;
+
+    @Service
+    public class UserService {
+        private final UserRepository userRepository;
+
+        @Autowired
+        public UserService(UserRepository userRepository) {
+            this.userRepository = userRepository;
+        }
+
+        public List<User> getTop5Users() {
+            return userRepository.findTop5ByOrderByFirstNameAsc();
+        }
+    }
+
+Controller class 
+-------------------------
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.web.bind.annotation.GetMapping;
+    import org.springframework.web.bind.annotation.RequestMapping;
+    import org.springframework.web.bind.annotation.RestController;
+    import java.util.List;
+
+    @RestController
+    @RequestMapping("/api/users")
+    public class UserController {
+        private final UserService userService;
+
+        @Autowired
+        public UserController(UserService userService) {
+            this.userService = userService;
+        }
+
+        @GetMapping("/top5")
+        public List<User> getTop5Users() {
+            return userService.getTop5Users();
+        }
+    }
+
+37. Difference between JPARepository and CRUDRepository.
+ans. CRUDRepository - It is a base interface and extends Repository Interface.
+It doesn't provide methods for implementing pagination and sorting
+To perform CRUD operations, define repository extending CrudRepository.
+
+JPARepository - It extends PagingAndSortingRepository that extends CrudRepository.
+It provides all the methods for which are useful for implementing pagination.
+To perform CRUD as well as batch operations, define repository extends JpaRepository.
+
+38.  Difference between traditional date time and new Date time Api in java8.
+ans. 
+Immutability:
+The new API's classes, such as LocalDate, LocalTime, and LocalDateTime, are immutable. This means that once created, their values cannot be changed. 
+
+Thread Safety:
+The immutable nature of the new API ensures thread safety, eliminating the need for explicit synchronization. Traditional classes are not thread-safe and require careful handling in concurrent environments.
+
+Performance:
+The new API is designed for better performance in date/time calculations and formatting/parsing. Traditional classes suffered from performance issues due to their underlying design.
+
+The new Date and Time API in Java 8 provides a more robust, efficient, and user-friendly way to work with dates and times compared to the traditional classes. It addresses the issues of mutability, poor design, lack of thread safety, limited functionality, poor performance, and inflexibility present in the old API. 
+
+39. Difference between Comparator and Comparable.
+ans. 
+Comparable:
+-------------------
+Purpose: Defines the natural ordering of objects within a class. 
+Implementation: Requires the class to implement the Comparable interface and override the compareTo(Object obj) method. 
+Usage: Used when you have a single, clear way to sort objects of that class. 
+Example: A Student class might implement Comparable to sort by student ID, as this is a common and natural ordering. 
+Modification: Modifies the class itself. 
+
+Comparator:
+-------------------
+Purpose:
+Allows for multiple ways to sort objects of a class, even if the class itself doesn't implement Comparable. 
+Implementation:
+A separate class that implements the Comparator interface and overrides the compare(Object obj1, Object obj2) method. 
+Usage:
+Useful when you need different sorting orders (e.g., sorting students by name, then by age) or when the class doesn't provide a natural ordering. 
+Example:
+You could have separate Comparator classes for sorting Student objects by name, by age, or by a combination of both. 
+Modification:
+Does not modify the class itself. 
+
+40. what is the output of below code snippet
+     	    String s1 = "abc";
+                String s2 = "abc";
+
+               s1 == s2 // true;
+
+ans. true
+
+41. will this code comile/ output of the code
+	try {
+                   BufferedReader br = new BufferedReader(new FileReader("file.txt"));
+    		System.out.println(br.readLine());
+    		br.close();
+} catch (IOException e) {
+   
+ System.exit(2);
+
+} finally {
+    System.out.println("Exiting the program");
+}
+
+ans. It will exit as System.exit is called.
+
+42. what is the output of this code snippet
+		public class Test {
+  	public static void main(String[] args) {
+   		try {
+   			throw new IOException("Hello");
+   		} catch(IOException | Exception e) {
+   			System.out.println(e.getMessage());
+   		}
+   	}
+}
+
+Ans. complies time error - > bcuze parent exception and child exception are in same block 
+
+43. synchronized method and  synchronized block differences and uses?
+ans. 
+synchronized method -> It synchronises entire method. 
+Only one thread can execute a synchronized method of a given object at a time.
+Limited, locks the entire method.
+Acquires a lock on the object instance for non-static methods or the class object for static methods. 
+
+synchronized block -> It synchronises specific code block.
+Acquires a lock on a specified object, which can be any object, including this, a member variable, or a custom object.
+More flexible, can lock different objects.
+
+44. findFirst and findAny() difference?
+ans. The findAny() method returns any element from a Stream, while the findFirst() method returns the first element in a Stream.
+findAny() is more efficient in parallel streams because it does not require maintaining the order of elements. findFirst() may result in slower performance in parallel streams because it has to preserve the order of elements to return the first one.
+
+45. vector vs ArrayList difference.
+ans. ArrayList is not synchronized, making it faster in single-threaded scenarios, while Vector is synchronized, providing thread safety but potentially impacting performance in multi-threaded environments. 
+
+Due to the lack of synchronization overhead, ArrayList generally offers better performance than Vector in single-threaded applications or when thread safety is not a primary concern. 
+Synchronization introduces overhead, making Vector slower than ArrayList in scenarios where thread safety is not a priority.
+
+Note : 
+Choose ArrayList for single-threaded applications or when you can manage thread safety externally.
+Choose Vector when you need built-in thread safety and performance is not a critical concern.
+If you need thread safety with ArrayList, you can synchronize it using Collections.synchronizedList(). 
+
+46. map vs flatMap.
+ans. map applies a function to each element of a stream, producing a new stream of the same size. flatMap also applies a function, but the function must return a stream, and flatMap then concatenates all the resulting streams into a single output stream.
+
+Essentially, map is for one-to-one transformations, while flatMap is for one-to-many transformations or flattening nested structures. 
+map returns a single element for each input element, while flatMap can return multiple elements (or a stream of elements) for each input element. 
+
+map is suitable for simple transformations where the output size is the same as the input size. flatMap is useful when dealing with nested collections, optionals, or when you need to generate a variable number of elements from each input.
+
+47. write custom immutable class.
+ans. 
+1. Declare the class as final - This prevents other classes from extending it, ensuring that the class's behavior cannot be altered through inheritance.
+
+2. Make all fields private and final:
+private ensures that the fields are not directly accessible from outside the class.
+final ensures that the fields can be initialized only once, typically in the constructor, and their values cannot be changed afterward.
+
+3. Provide a constructor to initialize all fields:
+The constructor should initialize all the final fields.
+If any fields are mutable objects (like List, Map, etc.), create a deep copy to avoid external modifications affecting the object's state.
+
+4. Do not provide setter methods:
+Since the goal is to make the object immutable, there should be no methods to modify the object's fields after its creation.
+
+5. Return copies of mutable objects in getter methods:
+If any fields are mutable objects, the getter methods should return a copy of the object, not a direct reference. This prevents external code from modifying the internal state of the immutable object.
+
+6. Override equals() and hashCode():
+To properly compare instances of the immutable class.
+
+48. Design pattern Singleton and its code 
+ans. The Singleton design pattern ensures that a class has only one instance and provides a global point of access to it. This pattern is useful when exactly one object is needed to coordinate actions across the system. 
+
+public class Singleton {
+    private static Singleton instance;
+
+    private Singleton() {
+        // Private constructor to prevent direct instantiation
+    }
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+
+    public void someMethod() {
+        System.out.println("Singleton method called");
+    }
+}
+
+49. SOLID principle. 
+ans. SOLID principles are a set of five design principles intended to make software designs more understandable, flexible, and maintainable.
+Single Responsibility Principle (SRP):
+A class should have only one reason to change. This means a class should have only one specific job or responsibility.
+
+Open/Closed Principle (OCP):
+Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification. This means you should be able to add new functionality without changing existing code.
+
+Liskov Substitution Principle (LSP):
+Subtypes must be substitutable for their base types without altering the correctness of the program. This means that derived classes should be able to replace their base classes without causing errors.
+
+Interface Segregation Principle (ISP):
+Clients should not be forced to depend on interfaces they do not use. This means that interfaces should be small and specific to the needs of their clients.
+
+Dependency Inversion Principle (DIP):
+High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions. This means that dependencies should be on interfaces or abstract classes rather than concrete classes.
+
+50. failFast vs FailSafe.
+ans. Fail-fast systems prioritize immediate failure reporting and halting execution upon encountering an error, allowing for easier debugging and earlier error detection. 
+Fail-safe systems, on the other hand, prioritize maintaining system operation and minimizing harm, even in the presence of errors, by attempting to recover from errors or gracefully degrade performance. 
+
+51. terminal vs intermediate operation in stream in java 8.
+ans. 
+Intermediate Operations:
+Transform or filter the elements of a stream.
+Return a new stream, allowing for further operations to be chained. 
+Are lazy, meaning they are not executed until a terminal operation is invoked.
+Examples include: filter, map, flatMap, distinct, sorted, limit, skip, peek.
+
+Terminal Operations:
+Produce a final result or side effect.
+Consume the stream and trigger the execution of all preceding intermediate operations.
+Can only be one terminal operation in a stream pipeline.
+Examples include: forEach, collect, reduce, count, anyMatch, allMatch, noneMatch, findFirst, findAny, min, max.
+
+52. types of beans in springboot.
+ans. singleton (default): One instance per container.
+prototype: New instance every time requested.
+request: One instance per web request.
+session: One instance per user session.
+application: One instance per servlet context.
+websocket: One instance per WebSocket.
+
+1. Singleton: 
+This is the default scope.
+Only one instance of the bean is created per Spring IoC container.
+All requests for that bean will receive the same instance.
+Suitable for stateless beans or those with shared resources.
+
+2. Prototype:
+A new instance of the bean is created every time it is requested from the container.
+Ideal for stateful beans where each request needs its own isolated instance.
+
+3. Request: 
+A new instance of the bean is created for each HTTP request.
+Only valid in web-aware Spring ApplicationContexts.
+Useful for storing request-specific data.
+
+4. Session: 
+A new instance of the bean is created for each HTTP session.
+Only valid in web-aware Spring ApplicationContexts.
+Suitable for storing user-specific data across multiple requests within the same session.
+
+5. Application:
+A single instance of the bean is created for the entire lifecycle of the web application
+Only valid in web-aware Spring ApplicationContexts.
+
+6. Global Session: 
+Scopes a single bean definition to the lifecycle of a global HTTP session.
+Typically used in Portlet applications.
+Only valid in web-aware Spring ApplicationContexts.
+
+53. how to define beans in springboot/spring.
+ans. In Spring and Spring Boot, a bean is an object managed by the Spring IoC (Inversion of Control) container. 
+1. Using Annotations: @Component, @Service, @Controller.
+2.  Defining Beans with @Bean: 
+@Bean
+    public MyService myService() {
+        return new MyService();
+    }
+
+54. @SpringbootAnnotaions working.
+ans. @SpringBootApplication annotation is used to mark a configuration class that declares one or more @Bean methods and also triggers auto-configuration and component scanning. 
+It's same as declaring a class with @Configuration, @EnableAutoConfiguration and @ComponentScan annotations.
+
+@Configuration
+Marks a class as a source of bean definitions.
+Methods within a @Configuration class annotated with @Bean are responsible for creating and managing Spring beans.
+
+@EnableAutoConfiguration
+Enables Spring Boot's automatic configuration mechanism.
+Based on the dependencies in the classpath, Spring Boot automatically configures the application with default settings and beans.
+
+@ComponentScan
+Directs Spring to scan specific packages for components (classes annotated with @Component, @Service, @Repository, @Controller, etc.).
+Automatically discovers and registers these components as Spring beans.
+
+55. @PostContruct vs @PreDestroy.
+ans. @PostConstruct and @PreDestroy are annotations used in Spring Boot to manage the lifecycle of beans. They mark methods that should be executed after the bean has been constructed and before the bean is destroyed, respectively.
+
+@PostConstruct
+Purpose:
+Marks a method that should be executed after dependency injection is complete. This is where initialization logic for the bean is typically placed. 
+Timing:
+Called after the bean's constructor and after all dependencies have been injected. It is invoked only once during the bean's lifecycle. 
+
+@PreDestroy
+Purpose:
+Marks a method that should be executed before the bean is removed from the Spring container.
+Timing:
+Called just before the bean is destroyed or the application context is closed.
+
+56. @Before vs @ After.
+ans.
+@Before:
+Execution: The @Before advice executes before the target method is invoked.
+Behavior: It can perform actions like logging input parameters or setting up resources.
+
+@After:
+Execution:
+The @After advice executes after the target method completes, regardless of whether the method executed normally or threw an exception.
+Behavior:
+It is often used for cleanup tasks, such as closing resources or logging the completion of a method.
+
+57. bean factory and application context.
+ans. 
+BeanFactory is the fundamental interface that provides all the basic functionality to create and manage the bean objects.
+Supports only Singleton and Prototype bean scopes.
+Does not support annotations; requires configuration in XML files.
+
+ApplicationContext interface extends the BeanFactory interface, it provides all the basic functionality and also some advanced features like the ability to load file resources in a generic fashion, to publish events to registered listeners, to resolve messages, supporting internationalization, etc.
+Supports all types of bean scopes, including Singleton, Prototype, Request, Session, etc.
+Supports annotation-based configuration for bean autowiring.
+
+58. autoboxing and unboxing.
+ans. 
+Autoboxing is the automatic conversion of a primitive data type into its corresponding wrapper class object. This occurs when a primitive value is used in a context where an object of its wrapper class is expected.
+// Autoboxing example
+int primitiveInt = 10;
+Integer wrapperInt = primitiveInt; // primitiveInt is autoboxed to an Integer object
+
+Unboxing is the automatic conversion of a wrapper class object into its corresponding primitive data type. This occurs when a wrapper class object is used in a context where a primitive value is expected. 
+// Unboxing example
+Integer wrapperInteger = 20;
+int primitiveValue = wrapperInteger; // wrapperInteger is unboxed to an int primitive
+
+59. What is wrapper class ?
+ans. A Wrapper class in Java is one whose object wraps or contains primitive data types. When we create an object in a wrapper class, it contains a field, and in this field, we can store primitive data types.
+They convert primitive data types into objects. Objects are needed if we wish to modify the arguments passed into a method (because primitive types are passed by value).
+The classes in java.util package handle only objects and hence wrapper classes help in this case.
+e.g. char -> Character , int -> Integer, long -> Long etc..
+
+60. reverse the string without using inbuilt function.
+ans. 
+int n = str.length();
+
+		String temp = "";
+
+		for(int i = n-1; i >0; i--){
+				
+		   temp =temp+str.charAt(i);
+
+
+		}
+		System.out.print(temp;);
+
+OR 
+
+List<String> list = s.stream()
+                            .map(str -> new StringBuilder(str).reverse().toString())
+                            .collect(Collectors.toList());
+
+61. list of strings, sort them according to increasing order of their length ("Saching", "Atul", "Amit", "Subham", "PratushVenkatheshIyer", "DikshaNitrate").
+
+ans. System.out.println(ll.stream().sorted(Comparator.comparingInt(String::length)).toList());
+
+62. Find later starting from Integer
+ans. 
+public class Main {
+    public static void main(String[] args) {
+        List<String> originalList = Arrays.asList("One", "2wo", "3hree", "Four", "5ive", "Six");
+
+        List<String> newList = originalList.stream()
+                .filter(e -> Character.isDigit(e.charAt(0)))
+                .collect(Collectors.toList());
+
+        System.out.println(newList); // Output: [2wo, 3hree, 5ive]
+    }
+}
+
+63.  first repeated character in a String str =  "Java Coforge Interview for today".
+ans. import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class FirstRepeatedWithStreams {
+    public static void main(String[] args) {
+        String str = "Java Coforge Interview for today".toLowerCase().replaceAll("\\s+", "");
+
+        Optional<Character> firstRepeated = str.chars()
+            .mapToObj(c -> (char) c)
+            .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()))
+            .entrySet().stream()
+            .filter(entry -> entry.getValue() > 1)
+            .map(Map.Entry::getKey)
+            .findFirst();
+
+        System.out.println(firstRepeated
+            .map(ch -> "First repeated character: '" + ch + "'")
+            .orElse("No repeated characters found."));
+    }
+}
+
+64. What is a marker interface, remote interface serialisation interface.
+ans. 
+Marker Interface -> A marker interface is an interface that has no methods or fields. It serves as a "tag" to indicate that a class possesses a certain property or capability. It's used to signal to the compiler or runtime environment that a class should be handled in a specific way.
+Serializable: Allows objects of a class to be serialized (converted into a byte stream). 
+Cloneable: Allows objects of a class to be cloned (created as a copy). 
+Remote: In RMI (Remote Method Invocation), it designates that a class's objects can be accessed remotely. 
+
+Remote Interface:
+Definition: In Java RMI, a remote interface defines the methods that can be invoked on a remote object. 
+Purpose: It specifies the API that a remote object exposes, allowing clients to interact with it as if it were local. 
+
+Serialization Interface (Serializable):
+Definition: The java.io.Serializable interface is a marker interface used to indicate that a class's objects can be serialized.
+Purpose: Serialization allows an object's state to be converted into a byte stream, which can then be stored, transmitted, or otherwise processed.
+
+65. @Transactional and Transient work .
+ans. @Transactional is used for managing database transactions, ensuring atomicity of operations, while transient (either as a keyword or JPA annotation) is used to exclude fields from certain operations, primarily serialization and persistence. 
+@Transactional - Ensures that a set of database operations are treated as a single unit of work. If any operation within the transaction fails, the entire transaction is rolled back, preventing inconsistent data.
+@Transient - Used to indicate that a field should be excluded from certain operations. This can be serialization (using the transient keyword in Java) or persistence (using the @Transient annotation in JPA/Hibernate). 
+
+66. What is has-a relation and what is Composition.
+ans. Has-A-Relation -  when one class uses another class as a component. It implies that the first class has or possesses the second class. Strong dependency, Ownership and hidden parts are the key features.
+Eg.  A car "has a" engine. The engine is a part of the car, and its existence is dependent on the car. If the car is destroyed, the engine is typically also destroyed. 
+
+Composition - This is a specific type of "has-a" relationship where the contained object cannot exist independently of the containing object. 
+
+67. What is coupling and correlation ?
+ans. 
+Coupling, in Java, describes the degree of interdependence between different modules, classes, or components within a software system. It essentially measures how much one component relies on the internal implementation details or structure of another. 
+Tight Coupling:
+Occurs when components are highly dependent on each other. Changes in one component often necessitate changes in others, making the system harder to maintain, test, and reuse.
+Loose Coupling:
+Represents a desirable state where components have minimal dependencies on each other. This allows for easier modification, testing, and reuse of individual components without significantly impacting others. Loose coupling is often achieved through interfaces, dependency injection, and well-defined APIs.
+
+Correlation, indicates how changes in one variable relate to changes in another.It is a statistical measure that can be used to analyze relationships between various characteristics of Java code, including coupling levels.
+
+68. What is IOC and DI.
+ans. Inversion of Control (IoC):
+IoC is a design principle that inverts the control flow of an application. 
+Instead of the application managing its dependencies, a framework or container handles the creation and management of objects and their dependencies. 
+This allows for greater flexibility and modularity in the application. 
+
+Dependency Injection (DI):
+DI is a specific technique to achieve IoC.
+It involves providing the dependencies of a class from an external source, rather than the class creating them internally.
+This promotes loose coupling between classes, making the code more maintainable and testable. 
+
+Key Differences Summarized:
+IoC is a broad principle, while DI is a specific implementation of that principle. 
+IoC is about transferring control to a framework, while DI is about providing dependencies to objects. 
+DI is often used to implement IoC in Java and other languages. 
+
+Example:
+Imagine a Game class that needs a Score object to function. In a traditional approach, the Game class might create a new Score object within its constructor or methods. With DI, an IoC container (like the Spring framework) would manage the Score object and inject it into the Game class when needed, without the Game class directly creating or managing the Score object itself. 
+
+69. Why String is immutable ?
+ans. Strings in Java are immutable, meaning that once a String object is created, its content cannot be changed. Any operation that appears to modify a String actually creates a new String object with the desired changes. Thread-safety is the primary concern here.
+
+70. What are Optional class and its uses ? 
+ans.  Its primary purpose is to provide a clear and explicit way to handle the absence of a value, thereby mitigating the risk of NullPointerExceptions and improving code readability. e.g isPresent(), isEmpty().
+Uses - Avoiding NullPointerException, Improving API clarity, Enhancing Code readability etc.
+
+71. Object class method name . 
+ans. In Java, every class implicitly or explicitly inherits from the java.lang.Object class. This means that all objects in Java inherit a set of fundamental methods from the Object class.
+Some of the methods are toString(), hashCode(), equals(), finalize(), clone() etc..
+
+72. Enumeration vs iterator.
+ans. Enumeration and Iterator are both interfaces used for traversing elements within collections, but they differ in their capabilities and applicability.
+
+Enumeration - Limited to legacy classes like Vector and Hashtable.
+Only supports read operation.
+Does not support fail-fast behavior. Some methods are hasMoreElements(), nextElement().
+
+Iterator - Universal, applicable to all collection classes in the Java Collections Framework.
+Supports read and remove operations.
+Provides fail-fast behavior during iteration. Some methods are hasNext(), next(), remove().
+
+73. Deep Copy and Shallow Copy. 
+ans. In Java, copying objects can be done in two primary ways: shallow copy and deep copy. The distinction lies in how they handle references to nested objects.
+
+A shallow copy creates a new object and copies the field values from the original object to the new object.
+For primitive data types (like int, double, boolean), the actual values are copied.
+For reference data types (objects), only the memory addresses (references) are copied, not the objects themselves. This means both the original and the copied object will point to the same nested objects in memory.
+
+A deep copy creates a completely independent copy of the original object, including all its nested objects. 
+For primitive data types, values are copied, similar to a shallow copy.
+For reference data types, new instances of the nested objects are created and then their values are copied. This ensures that the copied object has its own distinct copies of all nested objects, completely separate from the original.
+
+Note : A shallow copy shares references to nested objects, while a deep copy creates entirely new instances of them, ensuring complete independence between the original and the copied object. The choice between shallow and deep copy depends on whether the copied object needs to be completely independent or can share references to nested objects with the original.
+
+74. JVM JRE JDK working. 
+ans. 
+
+JVM	Java Virtual Machine	
+Executes Java bytecode	
+JVM contains Class loader, bytecode verifier, JIT compiler, garbage collector	
+Developers & end users
+
+JRE	Java Runtime Environment	
+Provides environment to run Java programs	
+JRE contains JVM + core libraries	
+End users
+
+
+JDK	Java Development Kit	
+Provides tools to develop Java programs	
+JDK contains JRE + compiler (javac), debugger, etc.	
+Developers
+
+You write Java code → saved as .java files.
+JDK compiles it using javac → produces .class bytecode.
+JRE provides the environment to run this bytecode.
+JVM inside the JRE interprets or compiles the bytecode into machine code and executes it.
+
+75. ClassLoader and its types. 
+ans. ClassLoader is responsible for loading class files into the Java Virtual Machine (JVM). There are three main types of built-in ClassLoaders: Bootstrap, Extension, and System (or Application) ClassLoader.
+
+Bootstrap ClassLoader:
+This is the parent of all other class loaders. 
+It's responsible for loading core Java library classes, typically found in rt.jar or the jre/lib directory. 
+
+Extension ClassLoader:
+Loads classes from the extensions directory, usually $JAVA_HOME/lib/ext. 
+This directory is deprecated in favor of modules. 
+
+System/Application ClassLoader:
+Loads classes from the application's classpath, which is specified by the CLASSPATH environment variable or command-line options. 
+
+76. Volatile vs Synchronized EW.
+ans. 
+
+Feature	  					volatile											synchronized
+Applies to					Variables only										Methods or code blocks
+Purpose		Ensures visibility of changes to variables across threads		Ensures mutual exclusion and visibility
+Atomicity				❌ Not guaranteed										✅ Guaranteed
+Locks					❌ No locking										✅ Uses intrinsic locks (monitors)
+Performance			Faster (no locking overhead)						Slower (due to locking and context switching)
+Use Case	When multiple threads read/write a variable                When you need to perform atomic operations or protect critical 
+			but no compound actions (like incrementing)	                    sections
+
+volatile boolean flag = true; // Ensures visibility, but not atomicity
+
+synchronized void increment() {
+    count++; // Ensures atomicity and visibility
+}
+
+77. Actuator in Spring Boot?
+ans. Spring Boot Actuator is like a built-in health monitor and diagnostics toolkit for your Spring Boot application. It provides production-ready features that help you monitor, manage, and interact with your app without writing extra code.
+Actuator exposes a set of endpoints (like /actuator/health, /actuator/info, etc.)
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+
+management.endpoints.web.exposure.include=*     //Inside application.properties
+
+78. can we only Read the method in JAVA?
+ans. In Java, you can't make a method strictly "read-only" in the same way you can make a variable final or a collection unmodifiable—but you can design your code so that a method only exposes data without modifying anything.
+
+a. Use only get methods (getters) These return values without changing any internal state.
+
+public String getName() {
+    return this.name;
+}
+b. Avoid side effects Don’t modify fields, call mutating methods, or perform I/O inside the method.
+c. Declare the method final (optional) Prevents subclasses from overriding it and potentially adding side effects.
+d. Return immutable or unmodifiable objects For example, use Collections.unmodifiableList() to return a read-only view:
+
+public List<String> getItems() {
+    return Collections.unmodifiableList(this.items);
+}
+e. Use interfaces with only getters You can expose a read-only view of an object by returning an interface that only has read methods.
+
+79. What is Lazy-Loading? 
+ans. Lazy loading:- means waiting to render content on a webpage until the user or the browser needs it. Lazy loading can help speed up webpage load times. Performance for Developers. 
+
+80. What is memory full in Java ? 
+ans. When you encounter a "memory full" situation in Java, it typically refers to an OutOfMemoryError, which means the Java Virtual Machine (JVM) has run out of memory and can’t allocate more for your application.
+
+81. Parallel Stream in Java8. 
+ans. a parallel stream is a feature introduced in Java 8 that allows you to process elements of a stream concurrently, leveraging multiple CPU cores for better performance—especially with large datasets. It is useful when order does not matters and elements are independent. 
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+// Using parallel stream to filter even numbers
+numbers.parallelStream()
+       .filter(n -> n % 2 == 0)
+       .forEach(System.out::println);
+
+82. Difference between consumer, supplier and predicate 
+Ans. The main difference between Consumer, Predicate, and Supplier functional interfaces lies in their purpose and the types of operations they represent. Consumer accepts an input and performs an action without returning anything (side effects). Predicate takes an input and returns a boolean result based on a condition. Supplier provides a result without taking any input, essentially acting as a factory or a source of values.
+
+83. What happens if a class overrides equals() but not hashcode().
+ans. Overriding equals() without also overriding hashCode() breaks the general contract between the two methods.
+If two objects are considered equal by equals(), they must return the same hashCode().If they don’t, hash-based collections won’t be able to locate them properly.
+You might insert an object into a HashSet, but later fail to find it—even though an equal object exists.
+
+A HashMap might treat two logically equal keys as different, leading to duplicate entries.
+Always override hashCode() whenever you override equals().
+Always override equals() and hashCode() together to maintain the contract: > If a.equals(b) is true, then a.hashCode() == b.hashCode() must also be true.
+
+84. Some common RESTAPI annotations. 
+ans. 
+
+@RestController				Marks the class as a REST controller (combines @Controller + @ResponseBody)
+@RequestMapping				Maps HTTP requests to handler methods (can be used at class or method level)
+@GetMapping					Handles HTTP GET requests
+@PostMapping				Handles HTTP POST requests
+@PutMapping					Handles HTTP PUT requests
+@DeleteMapping				Handles HTTP DELETE requests
+
+@PathVariable				Binds a URI template variable to a method parameter
+@RequestParam				Extracts query parameters from the URL
+@RequestBody				Binds the HTTP request body to a method parameter
+@ResponseBody				Sends the return value of a method directly as the HTTP response body
+
+85. Difference between @RequestParam and @PathVariable. 
+ans. 
+@RequestParam - Optional filters, search criteria, pagination, etc.	
+@PathVariable - Identifiers like user ID, product ID, etc.
+
+@RequestParam - /users?name=John	
+@PathVariable - /users/John
+
+@RequestParam("name") String name	
+@PathVariable("id") Long id
+
+Use @PathVariable when the value is part of the resource identity (like /products/42).
+Use @RequestParam when the value is a filter or modifier (like /products?category=books).
+
+// Using @RequestParam
+@GetMapping("/search")
+public String searchUser(@RequestParam String name) {
+    return "Searching for user: " + name;
+}
+
+// Using @PathVariable
+@GetMapping("/users/{id}")
+public String getUser(@PathVariable Long id) {
+    return "User ID: " + id;
+}
+
+86. Difference between RestAPI and SOAP API.
+ans. 
+REST API - It supports both JSON and XML.
+Uses standard HTTP methods: GET, POST, PUT, DELETE
+Lightweight and faster.
+HTTP/HTTPS. 
+Best for Mobile Apps, public APIs.
+
+SOAP API - Strictly XML only supported.
+Uses specific operations defined in WSDL.
+Heavier due to XML and strict standard.
+HTTP, SMTP, TCP, more
+Best suited for Enterprise-level application.
+
+87. Advantages of Springboot over spring. Any disadvantage?
+ans. 
+Advantages of Spring Boot
+------------------------------------
+Auto-Configuration - Spring Boot automatically configures your application based on the dependencies you add. No more boilerplate XML or manual setup.
+Standalone Applications - You can run your app with a simple main() method—no need to deploy to an external server. It embeds Tomcat, Jetty, or Undertow.
+Faster Development - With starter dependencies, embedded servers, and minimal configuration, you can go from idea to running app in minutes.
+Microservice - Friendly Spring Boot is tailor-made for building microservices—lightweight, modular, and easy to deploy.
+Production-Ready - Features Built-in support for metrics, health checks, and externalized configuration via Spring Boot Actuator.
+No XML Hell - Configuration is mostly annotation-based or handled via application.properties or application.yml.
+
+Disadvantages 
+---------------------
+Less Control The opinionated nature means Spring Boot makes a lot of decisions for you. Great for speed, but not always ideal for fine-tuned control.
+Larger Deployment Size Because of embedded servers and unused dependencies, the final JAR can be heavier than a traditional Spring app.
+
+88. What is a Bean ? 
+ans. In Spring, a bean is any object that is managed by the Spring IoC (Inversion of Control) container. You define it using annotations like @Component, @Service, or explicitly in a configuration class with @Bean.
+
+89. When to choose BeanFactory or ApplicationContext.
+ans. Use BeanFactory when:
+Memory is tight – It uses lazy loading, so beans are created only when needed.
+You want lightweight containers – Ideal for mobile or embedded systems.
+You don’t need advanced features – Like internationalization, event publishing, or AOP.
+You’re writing unit tests – And want minimal overhead.
+
+Use ApplicationContext when:
+You need full Spring features – Like @Autowired, @ComponentScan, @Value, etc.
+You want eager loading – Beans are created at startup, which can catch config issues early.
+You use internationalization – It supports MessageSource for i18n.
+You need event handling – It supports ApplicationEventPublisher.
+You want to use Spring Boot – It’s built entirely around ApplicationContext.
+
+90.  What is a Spring IOC container.
+ans. The IoC container is responsible for:
+Creating objects (called beans)
+Injecting dependencies into them (via constructor, setter, or field injection)
+Managing their lifecycle (from instantiation to destruction)
+Instead of your code manually creating and managing objects, the container takes control—hence the name Inversion of Control.
+
+91. What is Circular dependency and how you resolve it?
+ans. A circular dependency in Spring occurs when two or more beans depend on each other directly or indirectly, creating a loop that prevents the Spring container from resolving their dependencies during initialization.
+To prevent : 
+Use Setter or Field Injection Instead of Constructor Injection.
+Use @Lazy Annotation Tells Spring to inject the dependency lazily—only when it’s actually needed.
+Break the Cycle with Events or Interfaces Use Spring events or interfaces to decouple the interaction between beans.
+
+92.  How are you using logging in your project?
+ans. Actually I have used both Log4j as well as java's inbuilt java.util.logging in my application. Logback is default in springboot.
+Inside application.properties: 
+logging.level.root=INFO
+logging.level.com.yourpackage=DEBUG
+logging.file.name=app.log
+
+93. Difference between Agile and Scrum.
+ans. 
+Agile - Agile is a set of principles that's iterative and incremental. Suited for projects involving a small team of experts.
+The project head takes care of all tasks is vital to the project. In agile, changes cannot be handled frequently. The methodology requires frequent delivery to the end user.
+
+Scrum - Scrum is an implementation of the agile methodology. They are used in projects where the requirements are constantly changing.
+There's no leader, the scrum master, and the team addresses the issues. It involves cross-functional, self-organizing teams. It enables teams to react to changes quickly. With sprints, builds are delivered to clients for feedback.
+
+94. Array vs Array list.
+ans. 
+Array - An array can be single-dimensional or multi-dimensional. The length keyword gives the total size of the array. Array size is static and fixed length. Array speed is fast due to the fixed size. Directly stores primitive data types. Not type-safe as it does not support generics. 
+ArrayList - ArrayList can be only a single-dimensional. size() method returns the number of elements in the ArrayList. ArrayList size is dynamic. ArrayList speed is relatively slower due to resizing and dynamic behaviour. Primitive data types are not directly added to unlikely arrays, they are added indirectly with the help of autoboxing and unboxing. Supports generics, making ArrayList type-safe.
+
+95. Array list vs Linkedlist.
+ans. 
+ArrayList - This class uses a dynamic array to store the elements in it. Manipulating ArrayList takes more time due to the internal implementation. Whenever we remove an element, internally, the array is traversed and the memory bits are shifted. Insertion operation is slow. This class works better when the application demands storing the data and accessing it.
+
+Linkedlist - This class uses a doubly linked list to store the elements in it. Similar to the ArrayList, this class also supports the storage of all types of objects. Manipulating LinkedList takes less time compared to ArrayList because, in a doubly-linked list, there is no concept of shifting the memory bits. The list is traversed and the reference link is changed. Insertion operation is fast. This class works better when the application demands manipulation of the stored data.
+
+96.  Hashset vs Treeset. 
+ans. 
+Speed and internal implementation - For operations like search, insert, and delete HashSet takes constant time for these operations on average. HashSet is faster than TreeSet.
+Ordering - Elements in HashSet are not ordered. TreeSet maintains objects in Sorted order.
+Null Object - HashSet allows null object. TreeSet doesn't allow null Object and throw NullPointerException.
+Comparison - HashSet uses the equals() method to compare two objects in Set and for detecting duplicates. TreeSet uses compareTo() method for same purpose.
+
+Note - If you want a sorted Set then it is better to add elements to HashSet and then convert it into TreeSet rather than creating a TreeSet and adding elements to it.
+
+97. HashMap vs Concurrent HashMap.
+ans. 
+HashMap is non-Synchronized in nature i.e. HashMap is not Thread-safe whereas ConcurrentHashMap is Thread-safe in nature.
+
+HashMap performance is relatively high because it is non-synchronized in nature and any number of threads can perform simultaneously. But ConcurrentHashMap performance is low sometimes because sometimes Threads are required to wait on ConcurrentHashMap.
+
+While one thread is Iterating the HashMap object, if other thread try to add/modify the contents of Object then we will get Run-time exception saying ConcurrentModificationException.Whereas In ConcurrentHashMap we wont get any exception while performing any modification at the time of Iteration.
+
+98. HashMap vs HashSet.
+ans. 
+HashSet - The data is stored as objects. No duplicate values are allowed. It is comparatively slower than HashMap. It can contain a single null value. Only one value is required for the insertion process. Add() function is used for insertion. O(n) - TC
+HashMap - The data is stored as key-value pair. Yes duplicates values are allowed but no duplicate key is allowed. It is comparatively faster than HashSet because of hashing technique has been used here. Single null key and any number of null values. Two values are required for the insertion process. Put() function is used for insertion. O(1) - TC.
+
+99. Tree map vs HashMap.
+ans. 
+HashMap:
+Does not guarantee any specific order of elements. The order can change over time, especially after operations like insertion or deletion.
+Uses a hash table, where elements are distributed into "buckets" based on the hash code of their keys.
+Offers average O(1) time complexity for basic operations like get, put, and remove.
+Allows one null key and multiple null values.
+Preferred when fast insertion, retrieval, and deletion are the primary requirements and the order of elements is not important (e.g., caching, frequency counting).
+
+TreeMap :
+Stores keys in a sorted order, either naturally (for comparable keys) or according to a custom Comparator provided during initialization.
+Uses a Red-Black tree, a self-balancing binary search tree, which ensures logarithmic time complexity for most operations.
+Provides O(log n) time complexity for get, put, and remove operations due to its tree structure.
+Does not permit null keys but allows multiple null values. 
+Suitable when keys need to be stored and retrieved in a sorted order, or when range-based queries (e.g., finding keys within a specific range) are frequently performed.
+
+100. Factory design pattern.
+ans. The Factory Method Design Pattern is a creational design pattern that provides an interface for creating objects in a superclass, allowing subclasses to alter the type of objects that will be created. This pattern is particularly useful when the exact types of objects to be created may vary or need to be determined at runtime, enabling flexibility and extensibility in object creation.
+
+If your object creation process is complex or varies under different conditions, using a factory method can make your client code simpler and promote reusability.
+The Factory Method Pattern allows you to create objects through an interface or abstract class, hiding the details of concrete implementations. This reduces dependencies and makes it easier to modify or expand the system without affecting existing code.
+If your application needs to create different versions of a product or may introduce new types in the future, the Factory Method Pattern provides a flexible way to handle these variations by defining specific factory methods for each product type.
+
+// Library classes
+abstract class Vehicle {
+    public abstract void printVehicle();
+}
+
+class TwoWheeler extends Vehicle {
+    public void printVehicle() {
+        System.out.println("I am two wheeler");
+    }
+}
+
+class FourWheeler extends Vehicle {
+    public void printVehicle() {
+        System.out.println("I am four wheeler");
+    }
+}
+
+// Factory Interface
+interface VehicleFactory {
+    Vehicle createVehicle();
+}
+
+// Concrete Factory for TwoWheeler
+class TwoWheelerFactory implements VehicleFactory {
+    public Vehicle createVehicle() {
+        return new TwoWheeler();
+    }
+}
+
+// Concrete Factory for FourWheeler
+class FourWheelerFactory implements VehicleFactory {
+    public Vehicle createVehicle() {
+        return new FourWheeler();
+    }
+}
+
+// Client class
+class Client {
+    private Vehicle pVehicle;
+
+    public Client(VehicleFactory factory) {
+        pVehicle = factory.createVehicle();
+    }
+
+    public Vehicle getVehicle() {
+        return pVehicle;
+    }
+}
+
+// Driver program
+public class GFG {
+    public static void main(String[] args) {
+        VehicleFactory twoWheelerFactory = new TwoWheelerFactory();
+        Client twoWheelerClient = new Client(twoWheelerFactory);
+        Vehicle twoWheeler = twoWheelerClient.getVehicle();
+        twoWheeler.printVehicle();
+
+        VehicleFactory fourWheelerFactory = new FourWheelerFactory();
+        Client fourWheelerClient = new Client(fourWheelerFactory);
+        Vehicle fourWheeler = fourWheelerClient.getVehicle();
+        fourWheeler.printVehicle();
+    }
+}
+
+Use Cases of the Factory Method
+Below are the main use cases of factory method design pattern:
+-------------------------------------------------------------------------
+Used in JDBC for creating connections and in frameworks like Spring for managing beans.
+Libraries like Swing and JavaFX use factories to create flexible UI components.
+Tools like Log4j rely on factories to create configurable loggers.
+Factories help create objects from serialized data, supporting various formats.
+
+Advantages- 
+Separates creation logic from client code, improving flexibility.
+New product types can be added easily.
+Simplifies unit testing by allowing mock product creation.
+
+Disadvantages - 
+Adds more classes and interfaces, which can complicate maintenance.
+Clients need knowledge of specific subclasses.
+
+101. Singleton design pattern.
+ans. The singleton design pattern ensures that a class has only one instance and provides a global point of access to it.
+It's commonly used when a single object is needed to coordinate actions across a system, like managing a database connection, logging, or configuration settings. 
+e.g database connection.
+Use the Singleton method Design Pattern when:
+
+Consider using the Singleton pattern when you need to ensure that only one instance of a class exists in your application.
+Use it when you want to provide a straightforward way for clients to access that instance from a specific location in your code.
+If you think you might want to extend the class later, the Singleton pattern is a good choice. It allows for subclassing, so clients can work with the extended version without changing the original Singleton.
+This pattern is often used in situations like logging, managing connections to hardware or databases, caching data, or handling thread pools, where having just one instance makes sense
+/*package whatever //do not write package name here */
+import java.io.*;
+class Singleton {
+    // static class
+    private static Singleton instance;
+    private Singleton()
+    {
+        System.out.println("Singleton is Instantiated.");
+    }
+    public static Singleton getInstance()
+    {
+        if (instance == null)
+            instance = new Singleton();
+        return instance;
+    }
+    public static void doSomething()
+    {
+        System.out.println("Somethong is Done.");
+    }
+}
+
+class GFG {
+    public static void main(String[] args)
+    {
+        Singleton.getInstance().doSomething();
+    }
+}
+
+102. Prototype design pattern.
+ans.
+The Prototype Design Pattern is a creational pattern that enables the creation of new objects by copying an existing object. Prototype allows us to hide the complexity of making new instances from the client. 
+The existing object acts as a prototype and contains the state of the object.
+One of the best available ways to create an object from existing objects is the clone() method. Clone is the simplest approach to implementing a prototype pattern.
+
+Use the Prototype pattern when creating new objects is more complex or costly than copying existing ones. Cloning can be more efficient if significant resources are needed.
+The Prototype pattern is helpful for managing various objects with minor differences. Instead of creating multiple classes, you can clone and modify prototypes.
+
+103. Delegate design pattern.
+ans. The Business Delegate acts as a client-side business abstraction, it provides an abstraction for, and thus hides, the implementation of the business services. It reduces the coupling between presentation-tier clients and the system's Business services.
+
+interface BusinessService
+{
+    public void doProcessing();
+}
+
+class OneService implements BusinessService
+{
+    public void doProcessing() 
+    {
+        System.out.println(&quot;Processed Service One&quot;);
+    }
+}
+
+class TwoService implements BusinessService 
+{
+    public void doProcessing() 
+    {
+        System.out.println(&quot;Processed Service Two&quot;);
+    }
+}
+
+class BusinessLookUp 
+{
+    public BusinessService getBusinessService(String serviceType)
+    {
+        if(serviceType.equalsIgnoreCase(&quot;One&quot;))
+        {
+            return new OneService();
+        }
+        else
+        {
+            return new TwoService();
+        }
+   }
+}
+
+class BusinessDelegate
+{
+    private BusinessLookUp lookupService = new BusinessLookUp();
+    private BusinessService businessService;
+    private String serviceType;
+
+    public void setServiceType(String serviceType)
+    {
+        this.serviceType = serviceType;
+    }
+
+    public void doTask()
+    {
+        businessService = lookupService.getBusinessService(serviceType);
+        businessService.doProcessing();        
+    }
+}
+
+class Client 
+{
+    BusinessDelegate businessService;
+
+    public Client(BusinessDelegate businessService)
+    {
+        this.businessService  = businessService;
+    }
+
+    public void doTask()
+    {        
+        businessService.doTask();
+    }
+}
+
+class BusinessDelegatePattern
+{
+    public static void main(String[] args)
+    {
+        BusinessDelegate businessDelegate = new BusinessDelegate();
+        businessDelegate.setServiceType(&quot;One&quot;);
+
+        Client client = new Client(businessDelegate);
+        client.doTask();
+
+        businessDelegate.setServiceType(&quot;Two&quot;);
+        client.doTask();
+    }
+}
+
+Advantages :
+Business Delegate reduces coupling between presentation-tier clients and Business services.
+The Business Delegate hides the underlying implementation details of the Business service.
+
+Disadvantages :
+Maintenance due the extra layer that increases the number of classes in the application.
+
+104. Why static and default methods are allowed in interface.
+ans. 
+Default methods were introduced to provide backward compatibility for old interfaces so that they can have new methods without affecting existing code.
+The most common use of interface default methods is to incrementally provide additional functionality to a given type without breaking down the implementing classes. we can use them to provide additional functionality around an existing abstract method.
+
+Static methods in interfaces were introduced in Java 8 to provide a way to define utility or helper methods that are logically related to the interface, without requiring implementing classes to inherit or override them. The idea behind static interface methods is to provide a simple mechanism that allows us to increase the degree of cohesion of a design by putting together related methods in one single place without having to create an object.
+
+105. What is lambda function ?
+ans. A lambda expression is a short block of code which takes in parameters and returns a value. It facilitates Functional programming.
+It is introduced in Java8. 
+Syntax : (parameter1, parameter2) -> expression
+Lambda expressions can be stored in variables if the variable's type is an interface which has only one method.
+To use a lambda expression in a method, the method should have a parameter with a single-method interface as its type.
+If the lambda expression needs to return a value, then the code block should have a return statement.
+
+106. What is the requirement of the Functional interface.
+ans. A functional interface in Java is an interface that contains only one abstract method. 
+Functional interfaces can have multiple default or static methods, but only one abstract method. 
+Runnable, ActionListener, and Comparator are common examples of Java functional interfaces. 
+From Java 8 onwards, lambda expressions and method references can be used to represent the instance of a functional interface.
+
+Functional Interface in Java enables users to implement functional programming in Java. In functional programming, the function is an independent entity.
+Therefore, Java is an object-oriented programming language i.e everything in java rotates around the java classes and their objects.
+No function is independently present on its own in java. They are part of classes or interfaces. And to use them we require either the class or the object of the respective class to call that function.
+
+107. What is method reference and Optional class in Java 8.
+ans. Method references are a special type of lambda expressions. They’re often used to create simple lambda expressions by referencing existing methods.
+There are four kinds of method references:
+
+Static methods - messages.forEach(StringUtils::capitalize);
+Instance methods of particular objects - createBicyclesList().stream()
+  .sorted(bikeFrameSizeComparator::compare);
+Instance methods of an arbitrary object of a particular type - numbers.stream()
+  .sorted(Integer::compareTo);
+Constructor - bikeBrands.stream()
+  .map(Bicycle::new)
+  .toArray(Bicycle[]::new);
+
+108. What is deadlock and how to prevent.
+ans. A deadlock in Java is a situation where two or more threads are permanently blocked, each waiting for a resource that is held by another thread in the group. 
+This creates a circular dependency where no thread can proceed because each is waiting for a resource that will never be released. 
+The synchronized keyword, while crucial for thread safety, is the primary source of deadlocks in Java when not used carefully.
+
+Consistent Lock Ordering: The most effective way to prevent deadlocks is to ensure that all threads acquire locks in the same, predefined order.
+Minimizing the use of nested synchronized blocks or acquiring multiple locks within a single method can reduce the likelihood of deadlocks. If multiple locks are necessary, carefully manage their acquisition order.
+Using thread join: Deadlock condition appears when one thread is waiting for the other to finish. If this condition occurs we can use Thread. Join the with the maximum time you think the execution will take.
+
+109. Throw vs throws keyword.
+ans. 
+throw - The throw keyword is used to explicitly throw an instance of an exception.
+It is used within the body of a method or block of code.
+throw new ExceptionClass("message");
+It can only throw one exception at a time.
+
+throws - The throws keyword is used in a method signature to declare that a method might throw one or more specified exceptions. 
+It is used in the method signature, after the method parameters and before the opening curly brace.
+Syntax: public void methodName() throws ExceptionClass1, ExceptionClass2 { ... }
+It can declare multiple exceptions, separated by commas.
+
+110. Try-with-resource in java.
+ans. Try-with-resources statement is a try statement that declares one or more resources in it. 
+The try-with-resources statement ensures that each resource is closed at the end of the statement execution.
+
+111. When to go for Abstract class and when for Interface.
+ans. 
+Use an Interface when:
+You want to define a contract for behavior (what a class can do).
+You need multiple inheritance (a class can implement multiple interfaces).
+You want to provide default methods (since Java 8) without enforcing inheritance.
+
+Use an Abstract Class when:
+You want to define a base class with shared code (what a class is).
+You need to maintain state (fields) or constructors.
+You want to provide partial implementation to subclasses.
+
+112. How to convert a monolithic to microservice application.
+ans. 
+
+113. Synchronous vs Asynchronous communication in microservice ?
+ans. 
+Synchronous communication - A service calls another service directly and waits for a response (like a traditional function call).
+HTTP/REST is the common protocol used. 
+
+Characteristics:
+Blocking: Caller waits until callee responds.
+Tightly coupled: If Service B is down, Service A might fail.
+Simple debugging: Easier to trace since the request/response is immediate.
+
+Disadvantages - Reduced resilience: One failing service can cascade errors. Scalability bottlenecks: All services must be highly available.
+
+Use When:
+You need real-time responses. The call is critical and short-lived.
+
+Asynchronous communication - A service sends a message or event and doesn't wait for a response.
+Message Queues (RabbitMQ, Kafka, SQS) and Event Streams (Apache Kafka, EventBridge) are the common protocols used.
+
+Characteristics:
+Non-blocking: Caller continues execution without waiting.
+Loosely coupled: Services can be down or slow without affecting the caller.
+More complex: Requires event/message handling logic.
+
+Disadvantages - Complex debugging: Harder to trace issues across distributed async flows.
+Eventual consistency: No guarantee of immediate state sync.
+Delivery guarantees: Need retry, deduplication, etc.
+
+Use When:
+You need decoupled, scalable systems.
+Delayed responses are acceptable.
+Tasks are background jobs (e.g., email sending, order processing).
+
+114. DispatcherServlet and API gateway.
+ans.
+
+DispatcherServlet acts as the Front Controller for Spring-based web applications.
+DispatcherServlet handles an incoming HttpRequest, delegates the request, and processes that request according to the configured HandlerAdapter interfaces that have been implemented within the Spring application along with accompanying annotations specifying handlers, controller endpoints, and response objects.
+<servlet>
+    <servlet-name>frontcontroller-dispatcher</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+</servlet>
+The Dispatcher Servlet will be Initialized once we deploy the created dynamic web application inside the tomcat server. So before deploying it let's add the following line inside the web.xml file 
+<load-on-startup>1</load-on-startup>
+
+An API gateway acts as a single entry point for handling client requests to various backend services in a microservices architecture. It acts as a reverse proxy, routing requests to the appropriate services and performing tasks like authentication, authorization, and rate limiting. 
+Essentially, it simplifies interactions between clients and backend services by acting as a mediator and offering centralized management. 
+
+115. Using Java8 find the unique words and sort them alphabetically from a sentence.
+ans.
+List<String> fruits = Arrays.asList("Banana", "Apple", "Mango", "Grapes");
+List<String> sortedFruits = fruits.stream().distinct().sorted().collect(Collectors.toList());
+                                          
+
+Spring Annotations
+-----------------------------------
+
+@Required: It applies to the bean setter method. It indicates that the annotated bean must be populated at configuration time with the required property, else it throws an exception BeanInitializationException.
+
+@Autowired: Spring provides annotation-based auto-wiring with @Autowired annotation. It is used to autowire spring bean on setter methods, instance variable, and constructor. When we use @Autowired annotation, the spring container auto-wires the bean by matching data-type.
+
+@Configuration: It is a class-level annotation. The class annotated with @Configuration is used by Spring Containers as a source of bean definitions.
+
+@ComponentScan: It is used when we want to scan packages for beans. It is used with the annotation @Configuration. We can also specify the base packages to scan for Spring Components.
+
+@Bean: It is a method-level annotation. It is an alternative of XML <bean> tag. It tells the method to produce a bean to be managed by Spring Container.
+
+@Component: It is a class-level annotation. It is used to mark a Java class as a bean. A Java class annotated with @Component is found during the classpath. The Spring framework picks it and configures it in the application context as a Spring Bean.
+
+@Controller: The @Controller is a class-level annotation. It is a specialization of @Component. It marks a class as a web request handler. It is often used to serve web pages. By default, it returns a string that indicates which route to redirect. It is mostly used with @RequestMapping annotation.
+
+@Service: It is also used at class level. It tells the Spring that class contains the business logic.
+
+@Repository: It is a class-level annotation. The repository is a DAO (Data Access Object) that accesses the database directly. The repository does all the operations related to the database.
+
+@EnableAutoConfiguration: It auto-configures the bean that is present in the classpath and configures it to run the methods. The use of this annotation is reduced in Spring Boot 1.2.0 release because developers provided an alternative of the annotation, i.e., @SpringBootApplication.
+
+@SpringBootApplication: It is a combination of three annotations @EnableAutoConfiguration, @ComponentScan, and @Configuration.
+
+@RequestMapping: It is used to map the web requests. It has many optional elements like consumes, header, method, name, params, path, produces, and value. We use it with the class as well as the method.
+
+@GetMapping: It maps the HTTP GET requests on the specific handler method. It is used to create a web service endpoint that fetches. It is used instead of using: @RequestMapping(method = RequestMethod.GET)
+
+@PostMapping: It maps the HTTP POST requests on the specific handler method. It is used to create a web service endpoint that creates. It is used instead of using: @RequestMapping(method = RequestMethod.POST)
+
+@PutMapping: It maps the HTTP PUT requests on the specific handler method. It is used to create a web service endpoint that creates or updates. It is used instead of using: @RequestMapping(method = RequestMethod.PUT)
+
+@DeleteMapping: It maps the HTTP DELETE requests on the specific handler method. It is used to create a web service endpoint that deletes a resource. It is used instead of using: @RequestMapping(method = RequestMethod.DELETE)
+
+@PatchMapping: It maps the HTTP PATCH requests on the specific handler method. It is used instead of using:
+@RequestMapping(method = RequestMethod.PATCH)
+
+@RequestBody: It is used to bind HTTP request with an object in a method parameter. Internally it uses HTTP MessageConverters to convert the body of the request. When we annotate a method parameter with @RequestBody, the Spring framework binds the incoming HTTP request body to that parameter.
+
+@ResponseBody: It binds the method return value to the response body. It tells the Spring Boot Framework to serialize a return object into JSON and XML format.
+
+@PathVariable: It is used to extract the values from the URI. It is most suitable for the RESTful web service, where the URL contains a path variable. We can define multiple @PathVariable in a method.
+
+@RequestParam: It is used to extract the query parameters from the URL. It is also known as a query parameter. It is most suitable for web applications. It can specify default values if the query parameter is not present in the URL.
+
+
+Kafka Architecture & Components
+-------------------------------------------
+Components:
+
+Producer → It is the source of data who will publish the messages or events.
+
+Consumer → It acts as a receiver who is responsible for receiving / consuming messages.
+
+Broker → It is a server (intermediate) that helps in message exchanges b/w a producer and a consumer.
+
+Cluster → It is a group of servers that work for a common purpose. It is used in distributed systems like multiple Kafka servers. There can be one or more brokers in the Kafka clusters.
+
+Topic → It is inside a broker. As Kafka receives different types of events like payment transactions, ticket booking etc., now consumer needs to read all types of messages. So, broker filters the related messages asked by the consumer like for payment-related messages and again broker asks: I have many payment-related messages with me, which do you want?
+
+Topic helps to categorize different types of messages. It creates multiple topics to store different types of messages. This is how we can segregate different event types to different topics. It avoids back-and-forth communication. Topic acts as a database table in the Kafka ecosystem. Listeners can then just respond to the messages that belong to the topics they are listening on.
+
+Partition → If storage challenges arise, then as we know Kafka is a distributed system, we can break Kafka topic into multiple parts and then distribute those parts to different machines. This concept is called topic partitioning. It will give better performance and high ability because we split one topic to different partitions, so when publishers publish bulk messages each partition will concurrently accept the messages and will improve the performance.
+
+Offset → In Kafka, a sequence number is assigned to each message in each partition of a Kafka topic is called Offset. The purpose of Offset is to keep track of messages which have been already consumed by the consumer.
+
+Consumer Groups → When a single consumer reads from different partitions, then performance issue will occur because of lack of concurrency. We will share the workload. We will define ‘n’ number of consumer instances, and then I can group all the consumers which I defined into a single unit specified by group name. If consumer num is more then the extra consumer will sit idle.
+
+Note: We cannot guarantee about consumer and partition order. Any consumer can talk to any partition.
+
+Zookeeper → It is a pre-requisite for Kafka. Kafka is a distributed system and it uses Zookeeper for coordination and to track the status of Kafka cluster nodes. It also keeps track of Kafka topics, partitions, and offsets.
