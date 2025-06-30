@@ -1547,3 +1547,250 @@ Consumer Groups → When a single consumer reads from different partitions, then
 Note: We cannot guarantee about consumer and partition order. Any consumer can talk to any partition.
 
 Zookeeper → It is a pre-requisite for Kafka. Kafka is a distributed system and it uses Zookeeper for coordination and to track the status of Kafka cluster nodes. It also keeps track of Kafka topics, partitions, and offsets.
+
+116. Describe SDLC. Define some popular SDLC modules.
+ans. 
+SDLC (Software Development Life Cycle) is a structured process used by software developers and teams to design, develop, test, deploy, and maintain software efficiently and systematically.
+Phases of SDLC : 
+-------------------------
+Requirement Gathering & Analysis – Understand what the user or business needs.
+Planning – Define scope, resources, timeline, and cost.
+Design – Create architecture and system design (technical blueprint).
+Development – Code the actual software.
+Testing – Verify that the software works correctly (bugs, performance, etc.).
+Deployment – Release the product to production or customer.
+Maintenance – Fix issues, improve performance, or update after deployment.
+
+Some popular SDLC models : 
+----------------------------------
+Model	                                Description
+Waterfall	        Linear and sequential model. Each phase must be completed before the next. Simple but inflexible.
+Agile	      Iterative and incremental. Focuses on collaboration, flexibility, and customer feedback. Ideal for evolving requirements.
+Iterative	        Build an initial version quickly, then improve it through repeated cycles (iterations).
+V-Model	            Extension of Waterfall. Every development stage has a corresponding testing phase.
+Spiral	            Combines iterative and risk-driven development. Suitable for large, high-risk projects.
+Big Bang	        No formal planning. Code is written as required. Suitable for small projects or experiments.
+
+117. Simple REST API Example.
+
+Model class 
+------------------
+
+package com.example.crud.model;
+
+public class User {
+    private int id;
+    private String name;
+
+    public User() {}  // Default constructor
+
+    public User(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    // Getters & setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+UserController
+---------------------------
+private final Map<Integer, User> userStore = new HashMap<>();
+userStore.put(1, "Rohan");
+userStore.put(2, "Rajesh");
+
+ // CREATE
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        userStore.put(user.getId(), user);
+        return user;
+    }
+
+    // READ ALL
+    @GetMapping
+    public List<User> getAllUsers() {
+        return new ArrayList<>(userStore.values());
+    }
+
+    // READ BY ID
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable int id) {
+        return userStore.get(id);
+    }
+
+    // UPDATE
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable int id, @RequestBody User updatedUser) {
+        if (userStore.containsKey(id)) {
+            updatedUser.setId(id);
+            userStore.put(id, updatedUser);
+            return updatedUser;
+        }
+        return null;
+    }
+
+    // DELETE
+    @DeleteMapping("/{id}")
+    public String deleteUser(@PathVariable int id) {
+        return userStore.remove(id) != null ? "User deleted" : "User not found";
+    }
+
+118. Scenarios to choose Array and Arraylist.
+ans. 
+When to choose Array 
+----------------------------
+1. Fixed size is known ahead of time - Arrays are static in size. 
+2. Better performance is critical - Arrays have less overhead and slightly faster access time (e.g., in performance-critical or real-time applications).
+3. Working with primitives (int[], char[], etc.) - Arrays store primitives directly without boxing/unboxing.
+
+When to choose Arraylist
+-----------------------------------
+1. Dynamic size is needed - ArrayList grows/shrinks as needed using add() and remove().
+2. Frequent insertions/removals (at end) - No need to manage resizing yourself.
+3. Working with objects - Prefer ArrayList<String>, ArrayList<User>, etc., for flexibility.
+
+119. Why Map is not considered as collection ?
+ans. Because Map does not extend the Collection interface.
+A Map stores key-value pairs, not individual elements.
+It manages entries (key-value mappings) — not just values alone.
+That design is fundamentally different from what Collection represents(group of elements).
+
+120. What is an Observer pattern ?
+ans. The Observer Pattern is a behavioral design pattern used to define a one-to-many dependency between objects, so when one object changes, all its dependents (observers) are notified and updated automatically.
+When to Use Observer Pattern:
+------------------------------------------
+When multiple objects need to stay in sync with a central subject.
+
+For event systems, pub-sub mechanisms, or GUI listeners.
+Example use cases:
+
+Event handling (Swing, Android)
+Real-time systems (chat, weather updates)
+Logging frameworks.
+
+121. Steps to integrate Kafka with Springboot.
+ans. 
+<dependency>
+        <groupId>org.springframework.kafka</groupId>
+        <artifactId>spring-kafka</artifactId>
+</dependency>
+
+application.properties 
+-----------------------------
+# Kafka bootstrap server
+spring.kafka.bootstrap-servers=localhost:9092
+
+# Consumer group ID
+spring.kafka.consumer.group-id=my-group
+
+# Key/value serializers and deserializers
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.consumer.value-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer=org.apache.kafka.common.serialization.StringSerializer
+
+
+KafkaProducer
+--------------------
+@Service
+public class KafkaProducer {
+    private static final String TOPIC = "my-topic";
+
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+    public void sendMessage(String message) {
+        kafkaTemplate.send(TOPIC, message);
+    }
+}
+
+KafkaConsumer
+---------------------
+@Service
+public class KafkaConsumer {
+
+    @KafkaListener(topics = "my-topic", groupId = "my-group")
+    public void listen(String message) {
+        System.out.println("Received Message: " + message);
+    }
+}
+
+KafkaController
+--------------------------
+@RestController
+@RequestMapping("/kafka")
+public class KafkaController {
+
+    @Autowired
+    private KafkaProducer producer;
+
+    @PostMapping("/publish")
+    public String send(@RequestParam String message) {
+        producer.sendMessage(message);
+        return "Message sent to Kafka topic";
+    }
+}
+
+For Testing
+-----------------
+Start Kafka and Zookeeper locally or in Docker.
+
+Run your Spring Boot app.
+
+Call the endpoint:
+
+POST http://localhost:8080/kafka/publish?message=HelloKafka
+
+122. Difference between MongoDB and SQLDb.
+ans. 
+                        MongoDB	                                                    SQL DB
+                    NoSQL, document-based	                                Relational, table-based
+                        Flexible schema	                                        Fixed schema
+                    Easier to scale horizontally(sharding)	                  Supports vertical scaling.
+                    Great for fast iteration	                            Great for structured, related data
+
+123. Cheatsheet for MongoDB.
+ans. 
+show dbs
+db // prints the current database
+
+use <database_name>
+
+show collections
+
+db.coll.insertOne({name: "Max"})
+db.coll.insertMany([{name: "Max"}, {name:"Alex"}]) 
+
+db.coll.findOne() // returns a single document
+db.coll.find()    // returns a cursor - show 20 results - "it" to display more
+db.coll.find().pretty()
+db.coll.distinct("name")
+
+db.coll.countDocuments({age: 32}) // alias for an aggregation pipeline - accurate count
+db.coll.estimatedDocumentCount()
+
+// Comparison
+db.coll.find({"year": {$gt: 1970}})
+db.coll.find({"year": {$gte: 1970}})
+
+// Logical
+db.coll.find({name:{$not: {$eq: "Max"}}})
+db.coll.find({$or: [{"year" : 1958}, {"year" : 1959}]})
+
+db.coll.updateOne({"_id": 1}, {$set: {"year": 2016, name: "Max"}})
+
+db.coll.updateMany({}, {$inc: {"grades.$[]": 10}})
