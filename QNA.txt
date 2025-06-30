@@ -1794,3 +1794,14 @@ db.coll.find({$or: [{"year" : 1958}, {"year" : 1959}]})
 db.coll.updateOne({"_id": 1}, {$set: {"year": 2016, name: "Max"}})
 
 db.coll.updateMany({}, {$inc: {"grades.$[]": 10}})
+
+124. Difference between Thread class and Runnable interface.
+ans. If you extend the Thread class, your class cannot extend any other class.
+Using Runnable, your class is free to extend another class while still being able to run in a thread.
+So, it is better to use Runnable interface rather than extending Thread class.
+
+125. Which collection you will use to remove duplicates and what is its TC ?
+ans. To remove duplicates from a collection in Java, the best choice is a Set, especially HashSet. 
+A HashSet automatically removes duplicates because it does not allow duplicate elements.
+It’s also fast for insertion and lookup.
+O(1) - average case and O(n) -worst case due to hash collisions.
