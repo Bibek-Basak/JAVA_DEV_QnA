@@ -1805,3 +1805,73 @@ ans. To remove duplicates from a collection in Java, the best choice is a Set, e
 A HashSet automatically removes duplicates because it does not allow duplicate elements.
 It’s also fast for insertion and lookup.
 O(1) - average case and O(n) -worst case due to hash collisions.
+
+126. Difference between Spring and Springboot.
+ans. 
+Spring - We have to manually perform configuration here which requires a lot of boilerplate codes.
+It does not provide any embedded server.
+We have to manage dependencies manually.
+
+Springboot - Springboot automatically does all the configuration according to our needs which reduces boilerplate codes.
+It provides embedded servers like Tomcat, jetty and Undertow.
+We need to just add the dependencies and also much less than what we need to do in Spring application.
+
+127. What is Stringpool in Java?
+ans. It is a special memory region in Java heap memory where Strings literals are placed.
+String s1 = "Raju";
+String s2 = "Raju";
+
+Here, s1 and s2 point to the same object inside String pool.
+
+String s3 = "Raju";
+String s4 = new String("Raju");
+
+Here, s3 points to Stringpool but s4 points to heap memory not Stringpool.
+
+128. Difference between super and this keyword in Java.
+ans. 
+this -> It refers to the current class object.
+Access current class fields, methods, or constructors.
+Used to call another class constructor in the same class.
+Used to pass the current object as parameter.
+If class data member and function's local member are same name, then this keyword is used to call class data member.
+
+super -> It refers to the parent class object.
+Access parent class fields, methods, or constructors.
+It should be the first call within the constructor.
+
+129. Difference between static and non-static keyword in Java.
+ans. 
+static -> It belongs to class itself.
+It can be accessed via directly(inside the same class), classname and objectname.
+Memory allocation happens once throughout the program.
+It can access only static members.
+If used with block then it executes before main method.
+
+non-static -> It belongs to individual object or instance of the class.
+It can only be accessed via objectname.
+Memory allocation happens each time an object is created.
+It can access both static and non-static members.
+
+Note - static method can be accessed inside non-static method but vice-versa not possible.
+
+130. Difference between final, finally and finalize keyword in Java. 
+ans.
+final -> It is used to make a class not extended, variable constant and method not overridden.
+finally -> It is used in Exception handling scenarios. Whether any exception occurs or not, finally block will execute.
+finalize -> It is used in garbage collection scenario to execute cleanup process.  
+
+131. Difference between Error and Exception.
+ans. 
+Exception causes abnormal termination of the program.
+Error cannot be handled whether Exception can be handled by exception handling ways.
+
+132. Difference between throw and throws keyword.
+ans. 
+throw -> Used to actually throw an exception.
+Used inside Method body.
+It can throw One exception at a time.
+
+throws -> Used to declare that a method may throw an exception.
+Used during Method declaration.
+It Can declare multiple exceptions.
