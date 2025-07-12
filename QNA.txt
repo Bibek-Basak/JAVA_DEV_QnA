@@ -1251,7 +1251,9 @@ Use the Prototype pattern when creating new objects is more complex or costly th
 The Prototype pattern is helpful for managing various objects with minor differences. Instead of creating multiple classes, you can clone and modify prototypes.
 
 103. Delegate design pattern.
-ans. The Business Delegate acts as a client-side business abstraction, it provides an abstraction for, and thus hides, the implementation of the business services. It reduces the coupling between presentation-tier clients and the system's Business services.
+ans.  The Delegate design pattern is when an object needs to perform a certain action , instead of doing it by itself it transfers to another object (or delegates it) for its implementation. The one who transfers is Delegator and whom it gets transferred is delegate. 
+The Delegator doesn't know how the action is performed, only that it needs to be performed, and it trusts the Delegate to do it.
+It reduces the coupling between presentation-tier clients and the system's Business services.
 
 interface BusinessService
 {
@@ -1875,3 +1877,24 @@ It can throw One exception at a time.
 throws -> Used to declare that a method may throw an exception.
 Used during Method declaration.
 It Can declare multiple exceptions.
+
+133. How to improve performance or tools for performance optimization in microservices?
+Ans. 
+1. Implement caching using Redis cache or Hazelcast for frequent retrieval
+2. Implement API gateway mechanism like spring cloud gateway for traffic control
+3. Use monitoring tools like Prometheus or Grafana to minutely monitor your application 
+4. Use loadbalancers like Spring cloud load balancer to maintain load among instances.
+5. Implement containerisation with tools like Kubernetes
+6. Monitor latency issues(delay in request and response) using distributed tracing tools like Zipkin
+7. Use Asynchronous communication using Kafka
+8. To test performance and scalability use load testing tools like Apache jmeter
+9. Use optimised database queries
+10. Perform horizontal scaling
+
+134. Difference between Spring and Springboot? 
+ans. The main difference is Springboot supports auto-configuration which lacks in Spring. Otherwise both are used to develop java based enterprise application.
+Also Springboot has embedded servers.
+
+135. Difference between volatile and synchronized keyword.
+136. Difference between List and vector.
+137. Difference between Stack and Queue.
