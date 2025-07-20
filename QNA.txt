@@ -1896,5 +1896,13 @@ ans. The main difference is Springboot supports auto-configuration which lacks i
 Also Springboot has embedded servers.
 
 135. Difference between volatile and synchronized keyword.
+ans. Volatile is used to ensure memory visibility between threads making it a critical tool for building reliable multithreaded applications.
+Synchronized is used to provide thread safety i.e one thread can access the resource at a time.
+
 136. Difference between List and vector.
+ans. List is not synchronized and thread-safe whereas Vector is synchronized and thread-safe. 
+So, where thread-safety is a concern and there is no external thread-safety provided then go for vector instead of List.
+
 137. Difference between Stack and Queue.
+ans. Stack follows LIFO(Last In First Out) principle. Insertion and deletion takes place from top-order. E.g. Undo/Redo, Backtracking etc.
+Queue follows FIFO(First In First Out) principle. Insertion takes place from rear end and deletion takes place from front end. Task scheduling, BFS etc.
