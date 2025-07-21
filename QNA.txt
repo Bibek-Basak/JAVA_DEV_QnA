@@ -1906,3 +1906,47 @@ So, where thread-safety is a concern and there is no external thread-safety prov
 137. Difference between Stack and Queue.
 ans. Stack follows LIFO(Last In First Out) principle. Insertion and deletion takes place from top-order. E.g. Undo/Redo, Backtracking etc.
 Queue follows FIFO(First In First Out) principle. Insertion takes place from rear end and deletion takes place from front end. Task scheduling, BFS etc.
+
+138. What are some common REST API best practices you've followed?
+ans. Some common REST API practices are : 
+a. Use meaningful resource naming (use noun instead of verb)    GET  /employees/123  instead of  /getEmployee?id=123
+b. Use HTTP methods correctly. 
+c. Return proper HTTP status codes. 
+d. Use query parameter for filtering, sorting or pagination. 
+e. use versioning in URLs for backward compatibility for clients.
+f. Return structured JSON responses. 
+g. Handle errors gracefully. 
+h. Secure your APIs using Spring security, OAuth etc..
+
+139. What is the difference between get() and load() in Hibernate?
+ans. 
+get() - It returns actual object if found or null. It is used when you need the actual data.
+load() - It returns a proxy object irrespective of object is present in db or not. It is used when you just need reference. 
+
+140. How do you handle n+1 select problems?
+ans. 
+N+1 -> Suppose you query for a list of entities (e.g. Employee) and for each you lazily fetched an entity (e.g. department).
+So, here 1 query to get all employees but N additional queries to get the department for each employees. Total N + 1.
+
+To detect N+1 problem, 
+Use Hibernate logs:
+Set hibernate.show_sql=true and hibernate.format_sql=true
+
+Some of the ways to handle N + 1 problems are : 
+a. use JOIN FETCH 
+@Query("SELECT e FROM Employee e JOIN FETCH e.department")
+List<Employee> findAllWithDepartments();
+
+This loads all employees and their departments in one query.
+
+b. Use EntityGraph in Spring Data JPA
+@EntityGraph(attributePaths = {"department"})
+List<Employee> findAll();
+
+Cleaner and avoids hardcoding joins in queries.
+
+141. Write a simple SQL to fetch the second highest salary from an employee table.
+ans. SELECT salary 
+FROM Employee 
+ORDER BY salary DESC 
+LIMIT 1 OFFSET 1;
