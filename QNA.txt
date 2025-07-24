@@ -1950,3 +1950,45 @@ ans. SELECT salary
 FROM Employee 
 ORDER BY salary DESC 
 LIMIT 1 OFFSET 1;
+
+142. What is the difference between synchronized and Lock interface?
+ans.
+Locking is a mechanism used in concurrent programming to control access to a shared resource by multiple threads.
+It ensures that only one thread can access the shared resource at a time preventing data inconsistency. 
+
+Suppose two threads are accessing and modifying same account balance at same time. Without locking, both the threads might read the same value before either reads the result, leading to incorrect final balances. But, Locking ensures that one thread finishes its execution before another starts.
+
+Use synchronized : 
+a. For simple locking needs. 
+b. When you don't need advanced features like fairness, interruptibility, or multiple conditions.
+c. It does implicit locking.
+
+Use Lock interface:
+a. When you need fine-grained control over locking.
+b. When you need interruptible locks, timeouts, or multiple condition variables.
+c. Here, locking is provided explicitly.
+
+143. What are Callable and Future used for?
+ans. As we know, we implement Runnable interface to create and perform operations on thread. But Runnable can not return a result nor throw a checked exception. Hence, to get a result from background thread and handle exceptions inside a thread, we require Callable and Future. 
+
+Callable - A task that returns a result and can throw checked exceptions. 
+Callable<Integer> task = () -> {
+    // Simulate computation
+    Thread.sleep(1000);
+    return 42;
+};
+
+Future - It handles the result of Callable or represents the future result of a asynchronous computation. 
+You get a Future when you submit a Callable to the ExecutorService. 
+
+144. How do you handle thread-safety in a Java application?
+ans. Thread-safety means making sure that your code behaves correctly when multiple threads access shared resources simultaneously — without causing race conditions, data corruption, or inconsistent results.
+Some of the common ways to handle thread-safety : 
+a. By using synchronized blocks or methods. 
+b. Using java.util.Concurrent classes like ConcurrentHashMap.
+c. Use lock like ReadWriteLock instead of synchronized for more advanced control.
+
+145. How do you ensure message reliability and avoid duplication?
+ans. To ensure reliability , we can implement strategies like Message acknowledgements which confirms the consumer has received and processed the message and kafka redelivers message if no acknowledgement is received or else we can also implement retry mechanisms i.e if consumer is down then kafka will keep retrying until or unless it receives the message.
+
+To avoid duplication, persist message ID to database before processing and verify whether the ID already exists or not. 
