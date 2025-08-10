@@ -1992,3 +1992,50 @@ c. Use lock like ReadWriteLock instead of synchronized for more advanced control
 ans. To ensure reliability , we can implement strategies like Message acknowledgements which confirms the consumer has received and processed the message and kafka redelivers message if no acknowledgement is received or else we can also implement retry mechanisms i.e if consumer is down then kafka will keep retrying until or unless it receives the message.
 
 To avoid duplication, persist message ID to database before processing and verify whether the ID already exists or not. 
+
+146. What is a ThreadPool Executor in Java?
+ans. ThreadPoolExecutor is a class in java that provides a flexible and powerful way to manage pool of threads for executing tasks concurrently. Instead of creating new thread for every task (which is expensive), a thread pool reuses a fixed number of threads to run many tasks.
+
+147. When Constructor injection is preferred over setter injection?
+ans. 
+a. For mandatory dependencies : If a class cannot function without a dependency, use constructor injection.
+b. For Immutability : Constructor injection supports declaring fields as final, promoting immutability and thread safety.
+c. Easier Unit Testing : With constructor injection, dependencies can be passed via the constructor, making it straightforward to write tests with mocks/stubs.
+
+148. Which is the better way to use @Transactional annotation i.e at method level or class level?
+ans. Using at the method level is actually a better option because may be all methods don't requires @Transactional , so it gives freedom to use. Also using both at class level as well as in method level, later will override the former implementation.
+
+149. How would you handle when a transaction needs to be rolled back on a remote operation in service failing?
+ans. a. Throw an Exception on Remote Failure - Simply throw an Unchecked exception if remote call fails.
+b. If multiple services/databases are involved then use SAGA pattern.
+
+150. What is SAGA pattern ?
+ans. A Saga is a sequence of local transactions.
+Each local transaction updates data within a single microservice and publishes an event or invokes the next step.
+If something goes wrong, the saga pattern uses compensating transactions to undo the changes made by previous steps.
+
+151. What is Thread priority in Java?
+ans. In java, thread priority is a mechanism which enables java thread schedular to decide the order in which threads are executed.
+We can set a thread's priority using setPriority(int newPriority) method. 
+Thread.MIN_PRIORITY - 1 (least), Thread.MAX_PRIORITY - 10 (highest), Thread.NORM_PRIORITY - 5 are the enums to be set as args inside setPriority() method.
+
+152. What is Object slicing in Java?
+ans. Object slicing is a concept from languages like C++, where assigning an object of a derived class to an object of a base class by value causes the derived part to be "sliced off", losing the additional fields and methods of the subclass.
+Java does not supports Object slicing.
+
+153. Can we use a class without creating objects?
+ans. Yes, we can use a class without creating objects like using static variables/methods, static blocks or inside main() method since it is static.
+
+154. Is-A vs Has-A relationship?
+ans. Is-A relationship is implemented using inheritance. Dog is a animal.
+Has-A relationship is implemented using Composition. Car has a engine.
+
+155. Does synchronize always gurantees thread-safety?
+ans. Synchronized performs following actions:
+It provides mutual exclusion by locking an object or class, so only one thread at a time can execute the synchronized block/method on that lock.
+It also ensures visibility — changes made by one thread inside the synchronized block are visible to others once the lock is released.
+Thread-safety is ensured When all access (reads/writes) to shared mutable state is done inside synchronized blocks/methods locking on the same monitor.
+If only some methods or code paths are synchronized, while others access the same data unsynchronized.(not guranteed)
+
+156. How would you modify the logging framework without changing the code?
+ans. Most logging frameworks like Log4j, Logback, java.util.logging etc supports external configuration files or properties files where you can change log levels, appenders (destinations), formatters, and filters just by modifying these config files.
