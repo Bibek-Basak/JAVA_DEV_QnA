@@ -2039,3 +2039,4 @@ If only some methods or code paths are synchronized, while others access the sam
 
 156. How would you modify the logging framework without changing the code?
 ans. Most logging frameworks like Log4j, Logback, java.util.logging etc supports external configuration files or properties files where you can change log levels, appenders (destinations), formatters, and filters just by modifying these config files.
+
