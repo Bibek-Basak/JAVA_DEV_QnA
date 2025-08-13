@@ -2040,3 +2040,39 @@ If only some methods or code paths are synchronized, while others access the sam
 156. How would you modify the logging framework without changing the code?
 ans. Most logging frameworks like Log4j, Logback, java.util.logging etc supports external configuration files or properties files where you can change log levels, appenders (destinations), formatters, and filters just by modifying these config files.
 
+157. What is the use of private method in interface in Java?
+ans. Private methods are introduced in Java 9. These methods help in reusing common code within default and static method inside interface i.e if default and static methods have same code then better to keep it inside a private method rather than writing twice.
+However, private methods are not accessible outside the interface even not in its implementing classes.
+
+158. If two interfaces have the same default method and a class is implementing it, how could we access the method?
+ans. Here in this case, Java will throw Compile time exception until or unless we override the method in its implementing class and then call using interfaceName.super.methodName() in its first line to identify which method you want to call.
+
+159. What is var args in java? Can we use it instead of String[] args inside public static void main?
+ans. Var args allow you to pass 0 or more number of arguments instead of passing any array or list. 
+It is introduced in Java 5 and is represented using three dots (String... args).
+Yes, absolutely we can use var args (String... args) instead of String[] args and it will work exactly same but to maintain proper Java standard, it is advisable to use String [] args.
+
+160. Will a static method be called with a null object reference from the same class ?
+ans. Null object reference means A obj = null;
+Yes, we can call static method with null object reference because Java allows calling a static method through a null reference, because static methods are resolved at compile time (not runtime), and they belong to the class, not the instance. However, it is not advisable.
+
+161. How can we create our own custom Marker interface?
+ans. Marker interface example Serializable, Cloneable, remote etc. Real-time use includes logging, caching etc.
+a. First define the marker interface i.e no fields or methods.
+b. Define an implementing class.
+c. Use the marker in any class with reflection or logic check etc. 
+
+162. What are Spring-boot profiles?
+ans. Springboot profiles is a way to segregate your application's configuration based on specific environment like dev, test, prod etc.
+You can set using spring.profiles.active=dev in your application.properties or bootstrap.yaml file and then the configurations will work accordingly.
+
+163. Can we create a Functional interface without an abstract method?
+ans. No, we cannot create a Functional interface without an abstract method. It is necessary that a functional interface must contain an abstract method. 
+
+164. With a TreeSet containing null and another object(ABC), what will be the output when printed?
+ans. It will throw NullPointerException as TreeSet does not allows null objects.
+
+165. What is fault isolation?
+ans. Fault isolation is the ability of a system to detect, contain, and limit the impact of a failure to a specific part of the system—without affecting the rest.
+It involves loose coupling between services so that failure in one won't crash other services. 
+It is an important principle to create a robust and resilient microservices.
